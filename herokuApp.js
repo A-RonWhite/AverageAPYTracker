@@ -81,28 +81,13 @@ webScraper(
   "Solscan: "
 );
 
-const test = Buffer.from(
-  JSON.stringify({
-    apiKey: "AIzaSyBk4NCe0UbO4JVv3NM5cUrOTwNk4i_fU-4",
-    authDomain: "average-apy-tracker.firebaseapp.com",
-    projectId: "average-apy-tracker",
-    storageBucket: "average-apy-tracker.appspot.com",
-    messagingSenderId: "163842745130",
-    appId: "1:163842745130:web:cffb131e78732de0b6b453",
-    measurementId: "G-6SR6Z5GES1",
-  })
-).toString("base64");
-
 admin.initializeApp({
   credential: admin.credential.cert(
-    JSON.parse(Buffer.from(test, "base64").toString("ascii"))
+    JSON.parse(
+      Buffer.from(process.env.GOOGLE_CONFIG_BASE64, "base64").toString("ascii")
+    )
   ),
 });
-
-/* const firebaseAdminSdk = require('firebase-admin'),
-    firebaseAdminApp = firebaseAdminSdk.initializeApp({credential: firebaseAdminSdk.credential.cert(
-      JSON.parse(Buffer.from(process.env.GOOGLE_CONFIG_BASE64, 'base64').toString('ascii')))
-}); */
 
 const db = admin.firestore();
 

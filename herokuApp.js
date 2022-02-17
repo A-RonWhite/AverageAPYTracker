@@ -81,6 +81,24 @@ webScraper(
   "Solscan: "
 );
 
+setInterval(() => {
+  webScraper(
+    "https://francium.io/app/lend",
+    '//*[@id="app"]/div/div[3]/div/div/div/div[2]/div/div[2]/div/div/div/div/div/div/table/tbody/tr[22]/td[2]/div/p',
+    "Francium: "
+  );
+  webScraper(
+    "https://tulip.garden/lend",
+    '//*[contains(text(), "BASIS")]/parent::*/parent::*/parent::*//*[contains(text(), "%")]',
+    "Tulip: "
+  );
+  webScraper(
+    "https://solscan.io/account/3sBX8hj4URsiBCSRV26fEHkake295fQnM44EYKKsSs51",
+    '//*[@id="root"]/section/main/div/div[2]/div/div[1]/div/div[2]/div[4]/div[2]/text()[1]',
+    "Solscan: "
+  );
+}, 60 * 60 * 1000);
+
 admin.initializeApp({
   credential: admin.credential.cert(
     JSON.parse(

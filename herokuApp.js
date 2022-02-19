@@ -23,6 +23,10 @@ const webScraper = async (url, xPath, source) => {
 
   try {
     const page = await browser.newPage();
+
+    // See if this fixes francium time out issue
+    await page.setDefaultNavigationTimeout(0);
+
     await page.goto(url);
     await page.waitForTimeout(5000);
 
@@ -31,6 +35,18 @@ const webScraper = async (url, xPath, source) => {
     const text = await page.evaluate((el) => {
       return el.textContent;
     }, APYSelector);
+
+    console.log("Text print: ", text);
+
+    // tulip data not loading yet
+    if (text === "0.00 %" || undefined || null) {
+      await page.waitForTimeout(2000);
+      text = await page.evaluate((el) => {
+        return el.textContent;
+      }, APYSelector);
+
+      console.log("Text variable was 0, undefined or null - new value: ", text);
+    }
 
     if (source === "Solscan: ") {
       var text2 = text.replace(/,/g, "");

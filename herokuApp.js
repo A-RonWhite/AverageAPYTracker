@@ -32,7 +32,7 @@ const webScraper = async (url, xPath, source) => {
 
     const APYSelector = (await page.$x(xPath))[0];
 
-    const text = await page.evaluate((el) => {
+    let text = await page.evaluate((el) => {
       return el.textContent;
     }, APYSelector);
 

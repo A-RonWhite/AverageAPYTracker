@@ -11,21 +11,6 @@ Sentry.init({
   tracesSampleRate: 0.1,
 });
 
-const transaction = Sentry.startTransaction({
-  op: "test",
-  name: "My First Test Transaction",
-});
-
-setTimeout(() => {
-  try {
-    foo();
-  } catch (e) {
-    Sentry.captureException(e);
-  } finally {
-    transaction.finish();
-  }
-}, 99);
-
 const puppeteer = require("puppeteer-extra");
 const admin = require("firebase-admin");
 

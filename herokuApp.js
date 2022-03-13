@@ -1,3 +1,16 @@
+// Sentry IO Error tracking
+const Sentry = require("@sentry/node");
+const Tracing = require("@sentry/tracing");
+
+Sentry.init({
+  dsn: "https://c5957f50f0494809b8de74630dfcae59@o319326.ingest.sentry.io/6257087",
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 0.1,
+});
+
 const puppeteer = require("puppeteer-extra");
 const admin = require("firebase-admin");
 
@@ -74,6 +87,7 @@ const webScraper = async (url, xPath, source) => {
       console.log("Tulip: ", tulipAPY);
     }
   } catch (e) {
+    Sentry.captureException(e);
     console.log("There was an error: ", e);
   } finally {
     await browser.close();

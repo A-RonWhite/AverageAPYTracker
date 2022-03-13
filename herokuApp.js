@@ -12,6 +12,7 @@ puppeteer.use(AdblockerPlugin({ blockTrackers: true }));
 let basisAPY;
 let franciumAPY;
 let tulipAPY;
+let error = false;
 
 const webScraper = async (url, xPath, source) => {
   console.log(source, "starting scraping...");
@@ -33,13 +34,18 @@ const webScraper = async (url, xPath, source) => {
     const APYSelector = (await page.$x(xPath))[0];
 
     let text = await page.evaluate((el) => {
-      return el.textContent;
+      try {
+        return el.textContent;
+      } catch (e) {
+        console.log("Couldn't select textContent, error flag set");
+        error = true;
+      }
     }, APYSelector);
 
     console.log("Text print: ", text);
 
     // tulip data not loading yet
-    if (text === "0.00 %" || undefined || null) {
+    if (text === "0.00 %" || undefined || null || error) {
       await page.waitForTimeout(2000);
       text = await page.evaluate((el) => {
         return el.textContent;
@@ -83,7 +89,7 @@ const calculateAPY = (vaultTokens) => {
 
 webScraper(
   "https://francium.io/app/lend",
-  '//*[@id="app"]/div/div[3]/div/div/div/div[2]/div/div[2]/div/div/div/div/div/div/table/tbody/tr[22]/td[2]/div/p',
+  '//*[contains(text(), "BASIS")]/parent::*/parent::*/td[2]',
   "Francium: "
 );
 webScraper(
@@ -97,10 +103,11 @@ webScraper(
   "Solscan: "
 );
 
+//Run every 15 mins
 setInterval(() => {
   webScraper(
     "https://francium.io/app/lend",
-    '//*[@id="app"]/div/div[3]/div/div/div/div[2]/div/div[2]/div/div/div/div/div/div/table/tbody/tr[22]/td[2]/div/p',
+    '//*[contains(text(), "BASIS")]/parent::*/parent::*/td[2]',
     "Francium: "
   );
   webScraper(
@@ -113,7 +120,7 @@ setInterval(() => {
     '//*[@id="root"]/section/main/div/div[2]/div/div[1]/div/div[2]/div[4]/div[2]/text()[1]',
     "Solscan: "
   );
-}, 60 * 60 * 1000);
+}, 15 * 60 * 1000);
 
 admin.initializeApp({
   credential: admin.credential.cert(

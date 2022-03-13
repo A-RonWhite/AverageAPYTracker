@@ -147,7 +147,7 @@ admin.initializeApp({
 const db = admin.firestore();
 
 const updateFirebase = (document, field) => {
-  db.collection("APYDump")
+  db.collection("APY15")
     .doc(document)
     .update(field)
     .then(() => {

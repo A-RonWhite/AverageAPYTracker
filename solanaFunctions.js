@@ -45,6 +45,7 @@ const basisProjectedReturns = async () => {
   const APY = await projectedReturns();
 
   console.log(`Basis Print: ${APY}`);
+  console.log(Math.round(APY));
   return Math.round(APY);
 };
 

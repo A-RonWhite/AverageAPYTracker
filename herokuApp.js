@@ -129,8 +129,10 @@ webScraper(
   "Tulip: "
 );
 
-basisAPY = basisProjectedReturns();
-updateFirebase("BASIS", { [new Date().getTime()]: basisAPY });
+(async () => {
+  basisAPY = await basisProjectedReturns();
+  updateFirebase("BASIS", { [new Date().getTime()]: basisAPY });
+})();
 
 //Run every 15 mins
 setInterval(() => {
@@ -145,6 +147,8 @@ setInterval(() => {
     "Tulip: "
   );
 
-  basisAPY = basisProjectedReturns();
-  updateFirebase("BASIS", { [new Date().getTime()]: basisAPY });
+  (async () => {
+    basisAPY = await basisProjectedReturns();
+    updateFirebase("BASIS", { [new Date().getTime()]: basisAPY });
+  })();
 }, 15 * 60 * 1000);

@@ -13,6 +13,16 @@ Sentry.init({
   tracesSampleRate: 0.1,
 });
 
+admin.initializeApp({
+  credential: admin.credential.cert(
+    JSON.parse(
+      Buffer.from(process.env.GOOGLE_CONFIG_BASE64, "base64").toString("ascii")
+    )
+  ),
+});
+
+const db = admin.firestore();
+
 const puppeteer = require("puppeteer-extra");
 const admin = require("firebase-admin");
 
@@ -142,16 +152,6 @@ setInterval(() => {
   basisAPY = basisProjectedReturns();
   updateFirebase("BASIS", { [new Date().getTime()]: basisAPY });
 }, 15 * 60 * 1000);
-
-admin.initializeApp({
-  credential: admin.credential.cert(
-    JSON.parse(
-      Buffer.from(process.env.GOOGLE_CONFIG_BASE64, "base64").toString("ascii")
-    )
-  ),
-});
-
-const db = admin.firestore();
 
 const updateFirebase = (document, field) => {
   db.collection("APY15")

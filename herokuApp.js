@@ -39,6 +39,18 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
+const updateFirebase = (document, field) => {
+  db.collection("APY15")
+    .doc(document)
+    .update(field)
+    .then(() => {
+      console.log("Successfully added field to the database");
+    })
+    .catch((e) => {
+      console.log("There was an error: ", e);
+    });
+};
+
 const webScraper = async (url, xPath, source) => {
   console.log(source, "starting scraping...");
 
@@ -106,13 +118,6 @@ const webScraper = async (url, xPath, source) => {
   }
 };
 
-/* const calculateAPY = (vaultTokens) => {
-  var t = 80 * (13194.444444444443 / vaultTokens) * 365;
-  var x = Math.round(100 * (Math.pow(1 + t / 29200, 29200) - 1));
-  console.log("BASIS: ", x);
-  basisAPY = x;
-}; */
-
 webScraper(
   "https://francium.io/app/lend",
   '//*[contains(text(), "BASIS")]/parent::*/parent::*/td[2]',
@@ -123,11 +128,6 @@ webScraper(
   '//*[contains(text(), "BASIS")]/parent::*/parent::*/parent::*//*[contains(text(), "%")]',
   "Tulip: "
 );
-/* webScraper(
-  "https://solscan.io/account/3sBX8hj4URsiBCSRV26fEHkake295fQnM44EYKKsSs51",
-  '//*[@id="root"]/section/main/div/div[2]/div/div[1]/div/div[2]/div[4]/div[2]/text()[1]',
-  "Solscan: "
-); */
 
 basisAPY = basisProjectedReturns();
 updateFirebase("BASIS", { [new Date().getTime()]: basisAPY });
@@ -144,23 +144,7 @@ setInterval(() => {
     '//*[contains(text(), "BASIS")]/parent::*/parent::*/parent::*//*[contains(text(), "%")]',
     "Tulip: "
   );
-  /* webScraper(
-    "https://solscan.io/account/3sBX8hj4URsiBCSRV26fEHkake295fQnM44EYKKsSs51",
-    '//*[@id="root"]/section/main/div/div[2]/div/div[1]/div/div[2]/div[4]/div[2]/text()[1]',
-    "Solscan: "
-  ); */
+
   basisAPY = basisProjectedReturns();
   updateFirebase("BASIS", { [new Date().getTime()]: basisAPY });
 }, 15 * 60 * 1000);
-
-const updateFirebase = (document, field) => {
-  db.collection("APY15")
-    .doc(document)
-    .update(field)
-    .then(() => {
-      console.log("Successfully added field to the database");
-    })
-    .catch((e) => {
-      console.log("There was an error: ", e);
-    });
-};

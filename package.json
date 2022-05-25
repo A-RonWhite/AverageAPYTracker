@@ -2,11 +2,11 @@
   "dependencies": {
     "@sentry/node": "^6.18.2",
     "@sentry/tracing": "^6.18.2",
+    "@solana/web3.js": "^1.43.1",
     "firebase-admin": "^10.0.2",
     "puppeteer-extra": "^3.2.3",
     "puppeteer-extra-plugin-adblocker": "^2.12.0",
-    "puppeteer-extra-plugin-stealth": "^2.9.0",
-    "@solana/web3.js": "^1.36.0"
+    "puppeteer-extra-plugin-stealth": "^2.9.0"
   },
   "name": "apy-scrapper",
   "version": "1.0.0",

@@ -96,9 +96,9 @@ const webScraper = async (url, xPath, source) => {
       calculateAPY(text2);
       updateFirebase("BASIS", { [new Date().getTime()]: basisAPY });
     } else {
-      var text3 = text.replace(/[&\/\\#+()$~%]/g, "");
     } */
 
+    var text3 = text.replace(/[&\/\\#+()$~%]/g, "");
     if (source === "Francium: ") {
       franciumAPY = Math.round(text3);
       updateFirebase("Francium", { [new Date().getTime()]: franciumAPY });

@@ -2,6 +2,8 @@
 const Sentry = require("@sentry/node");
 const Tracing = require("@sentry/tracing");
 
+const { basisProjectedReturns } = require("./solanaFunctions");
+
 Sentry.init({
   dsn: "https://c5957f50f0494809b8de74630dfcae59@o319326.ingest.sentry.io/6257087",
 
@@ -67,13 +69,13 @@ const webScraper = async (url, xPath, source) => {
       console.log("Text variable was 0, undefined or null - new value: ", text);
     }
 
-    if (source === "Solscan: ") {
+    /* if (source === "Solscan: ") {
       var text2 = text.replace(/,/g, "");
       calculateAPY(text2);
       updateFirebase("BASIS", { [new Date().getTime()]: basisAPY });
     } else {
       var text3 = text.replace(/[&\/\\#+()$~%]/g, "");
-    }
+    } */
 
     if (source === "Francium: ") {
       franciumAPY = Math.round(text3);
@@ -94,12 +96,12 @@ const webScraper = async (url, xPath, source) => {
   }
 };
 
-const calculateAPY = (vaultTokens) => {
+/* const calculateAPY = (vaultTokens) => {
   var t = 80 * (13194.444444444443 / vaultTokens) * 365;
   var x = Math.round(100 * (Math.pow(1 + t / 29200, 29200) - 1));
   console.log("BASIS: ", x);
   basisAPY = x;
-};
+}; */
 
 webScraper(
   "https://francium.io/app/lend",
@@ -111,11 +113,14 @@ webScraper(
   '//*[contains(text(), "BASIS")]/parent::*/parent::*/parent::*//*[contains(text(), "%")]',
   "Tulip: "
 );
-webScraper(
+/* webScraper(
   "https://solscan.io/account/3sBX8hj4URsiBCSRV26fEHkake295fQnM44EYKKsSs51",
   '//*[@id="root"]/section/main/div/div[2]/div/div[1]/div/div[2]/div[4]/div[2]/text()[1]',
   "Solscan: "
-);
+); */
+
+basisAPY = basisProjectedReturns();
+updateFirebase("BASIS", { [new Date().getTime()]: basisAPY });
 
 //Run every 15 mins
 setInterval(() => {
@@ -129,11 +134,13 @@ setInterval(() => {
     '//*[contains(text(), "BASIS")]/parent::*/parent::*/parent::*//*[contains(text(), "%")]',
     "Tulip: "
   );
-  webScraper(
+  /* webScraper(
     "https://solscan.io/account/3sBX8hj4URsiBCSRV26fEHkake295fQnM44EYKKsSs51",
     '//*[@id="root"]/section/main/div/div[2]/div/div[1]/div/div[2]/div[4]/div[2]/text()[1]',
     "Solscan: "
-  );
+  ); */
+  basisAPY = basisProjectedReturns();
+  updateFirebase("BASIS", { [new Date().getTime()]: basisAPY });
 }, 15 * 60 * 1000);
 
 admin.initializeApp({

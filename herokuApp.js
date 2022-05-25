@@ -13,16 +13,6 @@ Sentry.init({
   tracesSampleRate: 0.1,
 });
 
-admin.initializeApp({
-  credential: admin.credential.cert(
-    JSON.parse(
-      Buffer.from(process.env.GOOGLE_CONFIG_BASE64, "base64").toString("ascii")
-    )
-  ),
-});
-
-const db = admin.firestore();
-
 const puppeteer = require("puppeteer-extra");
 const admin = require("firebase-admin");
 
@@ -38,6 +28,16 @@ let basisAPY;
 let franciumAPY;
 let tulipAPY;
 let error = false;
+
+admin.initializeApp({
+  credential: admin.credential.cert(
+    JSON.parse(
+      Buffer.from(process.env.GOOGLE_CONFIG_BASE64, "base64").toString("ascii")
+    )
+  ),
+});
+
+const db = admin.firestore();
 
 const webScraper = async (url, xPath, source) => {
   console.log(source, "starting scraping...");
